@@ -1,12 +1,10 @@
 body {
   margin: 0;
   padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 100vh;
-  background: url("BG1.jpg") no-repeat center center fixed;
-  background-size: cover;
+  width: 100vw;
+  background: url("BG1.jpg") no-repeat top left; /* Изменено на привязку к верхнему левому углу */
+  background-size: cover; /* Растягивает изображение, чтобы оно покрывало весь экран */
   font-family: Arial, sans-serif;
   position: relative;
 }
@@ -24,7 +22,7 @@ body {
 
 .number {
   font-size: 250px;
-  font-weight: normal;
+  font-weight: bold;
   color: black;
   text-align: center;
   text-shadow: none;
@@ -41,9 +39,9 @@ body {
 
 .spin-button {
   position: absolute;
-  bottom: 50px;
-  right: 50px;
-  font-size: 60px; 
+  bottom: 20px;
+  right: 20px;
+  font-size: 48px; 
   padding: 20px 40px; 
   background-color: #4CAF50;
   color: white;
