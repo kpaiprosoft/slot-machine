@@ -3,10 +3,11 @@ body {
   padding: 0;
   height: 100vh;
   width: 100vw;
-  background: url("BG1.jpg") no-repeat top left; /* Изменено на привязку к верхнему левому углу */
-  background-size: cover; /* Растягивает изображение, чтобы оно покрывало весь экран */
+  background: url("BG1.jpg") no-repeat top left;
+  background-size: cover;
   font-family: Arial, sans-serif;
   position: relative;
+  overflow: hidden; /* Убираем прокрутку, если что-то выходит за границы экрана */
 }
 
 .container {
@@ -15,13 +16,13 @@ body {
   align-items: center;
   gap: 20px;
   position: absolute;
-  top: 100px; /* Отступ от верхнего края (можно изменить) */
-  left: 50%;  /* Центрируем по горизонтали */
-  transform: translateX(-50%);  /* Центрируем по горизонтали */
+  top: 100px; /* Отступ от верхнего края */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .number {
-  font-size: 250px;
+  font-size: 200px; /* Размер текста для настольных устройств */
   font-weight: bold;
   color: black;
   text-align: center;
@@ -34,7 +35,7 @@ body {
   background: none;
   border: none;
   box-shadow: none;
-  position: relative; /* Устанавливаем для правильного позиционирования чисел */
+  position: relative;
 }
 
 .spin-button {
@@ -42,7 +43,7 @@ body {
   bottom: 20px;
   right: 20px;
   font-size: 48px; 
-  padding: 20px 40px; 
+  padding: 20px 40px;
   background-color: #4CAF50;
   color: white;
   border: none;
@@ -70,4 +71,45 @@ body {
 
 .glowing {
   animation: glow 1.5s ease-in-out infinite;
+}
+
+/* Адаптация для мобильных устройств */
+@media (max-width: 768px) {
+  .container {
+    top: 50px; /* Сдвигаем контейнер ближе к верхнему краю */
+    gap: 10px; /* Уменьшаем промежутки между числами */
+  }
+
+  .number {
+    font-size: 120px; /* Уменьшаем размер чисел */
+    width: 100px;
+    height: 150px;
+  }
+
+  .spin-button {
+    font-size: 32px; /* Уменьшаем размер кнопки */
+    padding: 10px 20px;
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    top: 30px; /* Еще ближе к верхнему краю для экранов с шириной до 480px */
+    gap: 5px; /* Минимальные промежутки */
+  }
+
+  .number {
+    font-size: 80px; /* Еще меньше текст */
+    width: 70px;
+    height: 100px;
+  }
+
+  .spin-button {
+    font-size: 24px;
+    padding: 5px 10px;
+    bottom: 5px;
+    right: 5px;
+  }
 }
