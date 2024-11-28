@@ -1,56 +1,58 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+document.addEventListener("DOMContentLoaded", () => {
+  const reels = [
+    document.getElementById("reel-1"),
+    document.getElementById("reel-2"),
+    document.getElementById("reel-3"),
+  ];
 
-canvas.width = 800; // Ширина холста
-canvas.height = 600; // Высота холста
+  const spinReels = () => {
+    let finalNumbers = [];
+    let currentNumbers = [0, 0, 0];
 
-// Параметры барабанов
-const reelX = [200, 400, 600];
-const reelY = 200;
-const reelWidth = 100;
-const reelHeight = 200;
-let spinning = [true, true, true];
-let finalNumbers = [0, 0, 0];
-let stopDelays = [1000, 2000, 3000]; // Задержка остановки каждого барабана
+    // Генерируем корректные финальные числа
+    do {
+      finalNumbers = [
+        Math.floor(Math.random() * 2), // Первый барабан: 0 или 1
+        Math.floor(Math.random() * 10), // Второй барабан: 0-9
+        Math.floor(Math.random() * 10), // Третий барабан: 0-9
+      ];
+    } while (parseInt(finalNumbers.join("")) > 199);
 
-// Функция для отображения числа
-function drawNumber(x, y, number, glow = false) {
-    ctx.font = '80px Arial';
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.shadowColor = glow ? 'yellow' : 'transparent';
-    ctx.shadowBlur = glow ? 20 : 0;
-    ctx.fillText(number, x, y);
-}
+    reels.forEach((reel, index) => {
+      let interval = setInterval(() => {
+        currentNumbers[index] =
+          index === 0
+            ? Math.floor(Math.random() * 2) // Первый барабан: 0 или 1
+            : Math.floor(Math.random() * 10); // Второй и третий: 0-9
+        reel.textContent = currentNumbers[index];
+      }, 100);
 
-// Анимация прокрутки
-function spinReels() {
-    const startTime = Date.now();
-    const spinInterval = setInterval(() => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Останавливаем барабан с задержкой
+      setTimeout(() => {
+        clearInterval(interval);
+        reel.textContent = finalNumbers[index]; // Устанавливаем финальное число
 
-        // Отрисовка барабанов
-        for (let i = 0; i < 3; i++) {
-            if (spinning[i]) {
-                const elapsed = Date.now() - startTime;
-                if (elapsed >= stopDelays[i]) {
-                    spinning[i] = false;
-                    finalNumbers[i] = Math.floor(Math.random() * 10); // Случайное число
-                }
-            }
-            const number = spinning[i] ? Math.floor(Math.random() * 10) : finalNumbers[i];
-            drawNumber(reelX[i], reelY, number, !spinning[i]); // Свечение итогового числа
+        // Если это последний барабан, добавляем эффект свечения
+        if (index === 2) {
+          reels.forEach((r) => {
+            r.style.color = "yellow";
+            r.style.textShadow = "0px 0px 20px yellow";
+          });
         }
+      }, 1000 + index * 500); // Увеличиваем задержку для каждого следующего барабана
+    });
+  };
 
-        // Проверка окончания
-        if (!spinning.includes(true)) {
-            clearInterval(spinInterval);
-        }
-    }, 100); // Обновление каждые 100 мс
-}
+  // Запуск прокрутки при нажатии пробела
+  document.addEventListener("keydown", (event) => {
+    if (event.code === "Space") {
+      // Убираем предыдущее свечение перед новой прокруткой
+      reels.forEach((r) => {
+        r.style.color = "black";
+        r.style.textShadow = "none";
+      });
 
-// Кнопка Spin
-document.getElementById('spinButton').addEventListener('click', () => {
-    spinning = [true, true, true];
-    spinReels();
+      spinReels();
+    }
+  });
 });
