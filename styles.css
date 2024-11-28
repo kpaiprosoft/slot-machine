@@ -1,38 +1,28 @@
 body {
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background: url('BG1.jpg') no-repeat center center/cover;
+  margin: 0;
+  padding: 0;
+  background: url('BG1.jpg') no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, sans-serif;
 }
 
-#game-container {
-    text-align: center;
-    position: relative;
+#slot-machine {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100vh;
 }
 
-canvas {
-    border: 5px solid #fff;
-    box-shadow: 0px 0px 20px rgba(255, 255, 0, 0.8);
-}
-
-#spinButton {
-    position: absolute;
-    bottom: -50px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 10px 20px;
-    font-size: 20px;
-    border: none;
-    background: #ff6600;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.5);
-}
-
-#spinButton:hover {
-    background: #ff8800;
+.reel {
+  width: 236px; /* Ширина барабана */
+  height: 478px; /* Высота барабана */
+  background: rgba(255, 255, 255, 0.8);
+  border: 3px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 500%; /* Размер шрифта для цифр */
+  font-weight: bold;
+  color: black;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
 }
