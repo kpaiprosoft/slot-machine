@@ -1,56 +1,69 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
+document.addEventListener("DOMContentLoaded", () => {
+  const numbers = [
+    document.getElementById("number-1"),
+    document.getElementById("number-2"),
+    document.getElementById("number-3"),
+  ];
 
-canvas.width = 800; // Ширина холста
-canvas.height = 600; // Высота холста
+  // Функция для изменения положения чисел
+  const setNumberPosition = (numberIndex, topPx, leftPx) => {
+    const numberElement = numbers[numberIndex];
+    numberElement.style.position = 'absolute'; // Устанавливаем абсолютное позиционирование
+    numberElement.style.top = `${topPx}px`;
+    numberElement.style.left = `${leftPx}px`;
+  };
 
-// Параметры барабанов
-const reelX = [200, 400, 600];
-const reelY = 200;
-const reelWidth = 100;
-const reelHeight = 200;
-let spinning = [true, true, true];
-let finalNumbers = [0, 0, 0];
-let stopDelays = [1000, 2000, 3000]; // Задержка остановки каждого барабана
+  // Пример задания позиции в пикселях для каждого числа
+  setNumberPosition(0, 270, -606); // Позиция первого числа
+  setNumberPosition(1, 270, -346); // Позиция второго числа
+  setNumberPosition(2, 270, -76); // Позиция третьего числа
 
-// Функция для отображения числа
-function drawNumber(x, y, number, glow = false) {
-    ctx.font = '80px Arial';
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.shadowColor = glow ? 'yellow' : 'transparent';
-    ctx.shadowBlur = glow ? 20 : 0;
-    ctx.fillText(number, x, y);
-}
+  const spinReels = () => {
+    let finalNumbers = [];
+    let currentNumbers = [0, 0, 0];
 
-// Анимация прокрутки
-function spinReels() {
-    const startTime = Date.now();
-    const spinInterval = setInterval(() => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Генерация корректных финальных чисел
+    do {
+      finalNumbers = [
+        Math.floor(Math.random() * 2), // Первый номер: 0 или 1
+        Math.floor(Math.random() * 10), // Второй номер: 0-9
+        Math.floor(Math.random() * 10), // Третий номер: 0-9
+      ];
+    } while (parseInt(finalNumbers.join("")) > 199);
 
-        // Отрисовка барабанов
-        for (let i = 0; i < 3; i++) {
-            if (spinning[i]) {
-                const elapsed = Date.now() - startTime;
-                if (elapsed >= stopDelays[i]) {
-                    spinning[i] = false;
-                    finalNumbers[i] = Math.floor(Math.random() * 10); // Случайное число
-                }
-            }
-            const number = spinning[i] ? Math.floor(Math.random() * 10) : finalNumbers[i];
-            drawNumber(reelX[i], reelY, number, !spinning[i]); // Свечение итогового числа
+    // Крутить числа
+    numbers.forEach((number, index) => {
+      let interval = setInterval(() => {
+        currentNumbers[index] =
+          index === 0
+            ? Math.floor(Math.random() * 2) // Первый номер: 0 или 1
+            : Math.floor(Math.random() * 10); // Второй и третий: 0-9
+        number.textContent = currentNumbers[index];
+      }, 100);
+
+      // Останавливаем номер с задержкой
+      setTimeout(() => {
+        clearInterval(interval);
+        number.textContent = finalNumbers[index]; // Устанавливаем финальное число
+
+        // Добавляем анимацию свечения
+        if (index === 2) {
+          numbers.forEach((n) => {
+            n.classList.add("glowing"); // Включаем анимацию для всех чисел
+          });
         }
+      }, 1000 + index * 1500); // Увеличиваем задержку для каждого следующего номера
+    });
+  };
 
-        // Проверка окончания
-        if (!spinning.includes(true)) {
-            clearInterval(spinInterval);
-        }
-    }, 100); // Обновление каждые 100 мс
-}
+  // Кнопка "Крутить!"
+  const spinButton = document.getElementById("spin-button");
+  spinButton.addEventListener("click", () => {
+    // Убираем предыдущее свечение перед новой прокруткой
+    numbers.forEach((n) => {
+      n.classList.remove("glowing");
+    });
 
-// Кнопка Spin
-document.getElementById('spinButton').addEventListener('click', () => {
-    spinning = [true, true, true];
     spinReels();
+  });
 });
